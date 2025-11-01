@@ -24,5 +24,5 @@ dependencies {
 
     api(libs.com.google.protobuf.protobuf.java)
 
-    runtimeOnly(libs.com.github.TIGERs.mannheim.ssl.game.controller.maven)
+    runtimeOnly(libs.com.github.lkhcode.ssl.game.controller.maven)
 }
