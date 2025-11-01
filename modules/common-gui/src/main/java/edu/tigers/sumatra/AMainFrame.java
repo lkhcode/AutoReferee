@@ -5,6 +5,8 @@
 package edu.tigers.sumatra;
 
 import edu.tigers.sumatra.views.SumatraView;
+import edu.tigers.sumatra.ui.EnhancedStatusDisplay;
+import edu.tigers.sumatra.ui.EnhancedUITheme;
 import lombok.Getter;
 
 import javax.swing.ButtonGroup;
@@ -38,6 +40,7 @@ public abstract class AMainFrame extends JFrame
 	private final JMenu menuViews = new JMenu("Views");
 	private final JMenu menuLayout = new JMenu("Layout");
 	private final JMenuItem menuItemLayoutSave = new JMenuItem("Save layout");
+	private final EnhancedStatusDisplay statusDisplay = new EnhancedStatusDisplay();
 
 	private final List<JMenuItem> layoutItems = new ArrayList<>();
 
@@ -45,15 +48,26 @@ public abstract class AMainFrame extends JFrame
 	protected AMainFrame()
 	{
 		setLayout(new BorderLayout());
-		setSize(new Dimension(800, 600));
+		setSize(new Dimension(1200, 800)); // Larger default size for better modern experience
 		setIconImage("/kralle-icon.png");
 
-		menuItemLayoutSave.setToolTipText("Saves current layout to file");
+		// Configure menu items with enhanced tooltips
+		menuItemLayoutSave.setToolTipText("Save current window layout configuration to file");
+		menuViews.setToolTipText("Manage and restore application views");
+		menuLayout.setToolTipText("Manage window layout configurations");
 
-		setJMenuBar(new JMenuBar());
+		// Setup enhanced menu bar
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(EnhancedUITheme.getStateColor(EnhancedUITheme.UIState.SECONDARY).brighter().brighter());
+		setJMenuBar(menuBar);
+		
 		menuViews.setMnemonic(KeyEvent.VK_V);
 		menuLayout.setMnemonic(KeyEvent.VK_L);
 		menuLayout.add(menuItemLayoutSave);
+		
+		// Add status display to bottom
+		add(statusDisplay, BorderLayout.SOUTH);
+		statusDisplay.setVisible(false); // Initially hidden
 	}
 
 
@@ -109,13 +123,28 @@ public abstract class AMainFrame extends JFrame
 	public Map<SumatraView, JMenuItem> setViewItems(Collection<SumatraView> views)
 	{
 		var menuItems = views.stream()
-				.collect(Collectors.toMap(Function.identity(), view -> new JMenuItem(view.getType().getTitle())));
+				.collect(Collectors.toMap(Function.identity(), view -> {
+					JMenuItem item = new JMenuItem(view.getType().getTitle());
+					item.setToolTipText("Open " + view.getType().getTitle() + " view");
+					return item;
+				}));
 
 		menuViews.removeAll();
 		menuItems.values()
 				.stream().sorted(Comparator.comparing(JMenuItem::getText))
 				.forEach(menuViews::add);
 
+		// Show status when views are updated
+		statusDisplay.showSuccess("Views updated - " + views.size() + " views available");
+		
 		return menuItems;
+	}
+	
+	/**
+	 * Gets the status display component for showing notifications
+	 */
+	public EnhancedStatusDisplay getStatusDisplay()
+	{
+		return statusDisplay;
 	}
 }

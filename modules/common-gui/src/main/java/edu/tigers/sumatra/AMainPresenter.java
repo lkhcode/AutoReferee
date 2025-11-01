@@ -6,6 +6,8 @@ package edu.tigers.sumatra;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import edu.tigers.sumatra.model.SumatraModel;
+import edu.tigers.sumatra.ui.EnhancedUITheme;
+import edu.tigers.sumatra.ui.EnhancedViewManager;
 import edu.tigers.sumatra.util.GlobalShortcuts;
 import edu.tigers.sumatra.util.ScalingUtil;
 import edu.tigers.sumatra.views.SumatraView;
@@ -69,9 +71,13 @@ public abstract class AMainPresenter<T extends AMainFrame>
 
 	@Getter
 	private final List<SumatraView> views;
+	private final EnhancedViewManager viewManager;
 
 	static
 	{
+		// Apply enhanced theme for better UI appearance
+		EnhancedUITheme.applyEnhancedTheme();
+		
 		InfoNodeLookAndFeel.install();
 		FlatIntelliJLaf.installLafInfo();
 		FlatLightLaf.installLafInfo();
@@ -79,6 +85,8 @@ public abstract class AMainPresenter<T extends AMainFrame>
 		ScalingUtil.updateBaselineSize(new JTextPane().getFont().getSize());
 		// JMenuBar on the macOS menu bar
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		
+		log.info("UI theme and scaling configuration completed");
 	}
 
 
@@ -89,6 +97,10 @@ public abstract class AMainPresenter<T extends AMainFrame>
 		this.rootWindow = createRootWindow(views);
 		this.name = name;
 		layoutConfigPath = LAYOUT_CONFIG_PATH.resolve(name);
+
+		// Initialize enhanced view manager
+		this.viewManager = new EnhancedViewManager(views);
+		this.viewManager.setStatusDisplay(mainFrame.getStatusDisplay());
 
 		rootWindow.addListener(new ViewUpdater());
 		mainFrame.add(rootWindow, BorderLayout.CENTER);
@@ -101,6 +113,9 @@ public abstract class AMainPresenter<T extends AMainFrame>
 
 		mainFrame.getMenuItemLayoutSave().addActionListener(e -> onSaveLayout());
 		mainFrame.addWindowListener(new WindowListener());
+
+		// Show startup message
+		mainFrame.getStatusDisplay().showSuccess("Application initialized with " + views.size() + " views");
 
 		mainFrame.setVisible(true);
 	}
@@ -270,17 +285,19 @@ public abstract class AMainPresenter<T extends AMainFrame>
 		 */
 		RootWindowProperties properties = new RootWindowProperties();
 
-		// --- set gradient theme. The theme properties object is the super object of our properties object, which
-		// means our property value settings will override the theme values ---
-		properties.addSuperObject(new ShapedGradientDockingTheme().getRootWindowProperties());
+		// Apply enhanced docking theme for modern appearance
+		var enhancedTheme = EnhancedUITheme.createEnhancedDockingTheme();
+		properties.addSuperObject(enhancedTheme.getRootWindowProperties());
 
-		// --- our properties object is the super object of the root window properties object, so all property values of
-		// the
-		// theme and in our property object will be used by the root window ---
+		// Configure additional properties for better UX
 		newRootWindow.getRootWindowProperties().addSuperObject(properties);
 
-		// --- enable the bottom window bar ---
+		// Enable window bars for better navigation
 		newRootWindow.getWindowBar(Direction.DOWN).setEnabled(true);
+		newRootWindow.getWindowBar(Direction.LEFT).setEnabled(true);
+		newRootWindow.getWindowBar(Direction.RIGHT).setEnabled(true);
+		
+		log.trace("Enhanced root window created with {} views", views.size());
 
 		return newRootWindow;
 	}
