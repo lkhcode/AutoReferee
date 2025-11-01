@@ -29,6 +29,6 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
-          docker build --pull -t tigersmannheim/auto-referee-vnc:latest src/main/docker-vnc
+          docker build --pull -t herryli124/auto-referee-vnc:latest src/main/docker-vnc
           docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
-          docker push tigersmannheim/auto-referee-vnc:latest
+          docker push herryli124/auto-referee-vnc:latest

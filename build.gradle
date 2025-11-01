@@ -52,7 +52,7 @@ application {
 
 jib {
     to {
-        image = "registry.hub.docker.com/tigersmannheim/auto-referee:latest"
+        image = "registry.hub.docker.com/herryli124/auto-referee:latest"
         tags = [project.version.toString()]
         auth {
             username = System.getenv("DOCKER_HUB_USERNAME") ?: ""
