@@ -84,11 +84,11 @@ GUI 由多个可以动态排列的视图组成。如果某个视图没有显示�
 
 ### 视觉端口
 默认情况下，应用程序将尝试从 **224.5.23.2:10006** 接收视觉帧。
-你可以在 [config/moduli/moduli.xml](config/moduli/moduli.xml) 中更改默认地址和端口。
+你可以在 [config/moduli/autoreferee.xml](config/moduli/autoreferee.xml) 中更改默认地址和端口。
 
 ## 裁判端口
 默认情况下，应用程序将尝试从 **224.5.23.1:10003** 接收裁判消息。
-你可以在 [config/moduli/moduli.xml](config/moduli/moduli.xml) 中更改默认地址和端口。
+你可以在 [config/moduli/autoreferee.xml](config/moduli/autoreferee.xml) 中更改默认地址和端口。
 
 ### 自动裁判检测器
 可以通过**autoreferee**配置部分更改自动裁判的行为。它包含检测器的参数。
@@ -97,10 +97,10 @@ GUI 由多个可以动态排列的视图组成。如果某个视图没有显示�
 规则定义的参数可以在**ruleConst**下找到。
 
 默认几何参数从 [config/geometry/DIV_A.txt](config/geometry/DIV_A.txt) 读取。
-可以在 [config/moduli/moduli.xml](config/moduli/moduli.xml) 中更改要读取的文件。
+可以在 [config/moduli/autoreferee.xml](config/moduli/autoreferee.xml) 中更改要读取的文件。
 
 ## 激活内置的 ssl-game-controller
-自动裁判系统内置了官方的 ssl-game-controller。要激活它，请在 [config/moduli/moduli.xml](config/moduli/moduli.xml) 中将 `gameController` 改为 true。
+自动裁判系统内置了官方的 ssl-game-controller。要激活它，请在 [config/moduli/autoreferee.xml](config/moduli/autoreferee.xml) 中将 `gameController` 改为 true。
 自动裁判系统将在内部启动游戏控制器并连接到其 websocket API，以便能够通过**Ref**视图发送一些基本命令。
 该视图还包含一个启动 GC 的 UI 的按钮。
 
