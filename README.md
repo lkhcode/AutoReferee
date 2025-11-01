@@ -49,7 +49,7 @@ docker run --net host  -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY 
 无GUI（headless）版本可以使用以下命令运行：
 
 ```shell
-docker run --net host tigersmannheim/auto-referee
+docker run --net host herryli124/auto-referee
 ```
 ## IntelliJ 配置
 IntelliJ 可以读取 Gradle 配置并使用 Gradle 执行构建。
