@@ -49,19 +49,34 @@ public class EnhancedUITheme
 	 */
 	public static void applyEnhancedTheme()
 	{
+		long startTime = System.currentTimeMillis();
+		log.debug("Starting enhanced UI theme initialization");
+		
 		try
 		{
-			// Set Look and Feel
-			UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatIntelliJLaf());
+			// Set Look and Feel with timeout protection
+			javax.swing.SwingUtilities.invokeAndWait(() -> {
+				try {
+					// Set Look and Feel
+					UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatIntelliJLaf());
+					
+					// Configure UI defaults for better appearance
+					configureUIDefaults();
+					
+					log.debug("Look and Feel applied successfully on EDT");
+				} catch (Exception e) {
+					log.warn("Failed to apply Look and Feel on EDT", e);
+					throw new RuntimeException("Theme application failed", e);
+				}
+			});
 			
-			// Configure UI defaults for better appearance
-			configureUIDefaults();
-			
-			log.info("Enhanced UI theme applied successfully");
+			long elapsed = System.currentTimeMillis() - startTime;
+			log.info("Enhanced UI theme applied successfully in {}ms", elapsed);
 		}
 		catch (Exception e)
 		{
-			log.warn("Failed to apply enhanced theme, falling back to default", e);
+			long elapsed = System.currentTimeMillis() - startTime;
+			log.warn("Failed to apply enhanced theme after {}ms, falling back to default", elapsed, e);
 			applyFallbackTheme();
 		}
 	}

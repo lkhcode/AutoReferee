@@ -30,7 +30,17 @@ public class EnhancedViewManager
 	
 	public EnhancedViewManager(Collection<SumatraView> views)
 	{
-		registerViews(views);
+		long startTime = System.currentTimeMillis();
+		log.debug("Initializing EnhancedViewManager with {} views", views.size());
+		
+		try {
+			registerViews(views);
+			long elapsed = System.currentTimeMillis() - startTime;
+			log.debug("EnhancedViewManager initialization completed in {}ms", elapsed);
+		} catch (Exception e) {
+			log.error("Failed to initialize EnhancedViewManager", e);
+			throw new RuntimeException("EnhancedViewManager initialization failed", e);
+		}
 	}
 	
 	/**

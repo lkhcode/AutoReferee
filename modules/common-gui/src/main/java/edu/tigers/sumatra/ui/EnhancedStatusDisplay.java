@@ -40,20 +40,38 @@ public class EnhancedStatusDisplay extends JPanel
 	
 	public EnhancedStatusDisplay()
 	{
-		setLayout(new BorderLayout());
-		setBorder(new EmptyBorder(8, 12, 8, 12));
-		setOpaque(false);
+		long startTime = System.currentTimeMillis();
+		log.debug("Initializing EnhancedStatusDisplay");
 		
-		statusLabel = new JLabel("Ready");
-		statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		statusLabel.setForeground(Color.WHITE);
-		add(statusLabel, BorderLayout.CENTER);
-		
-		// Timer for fade animations
-		fadeTimer = new Timer(16, new FadeAnimator()); // ~60fps
-		
-		// Initial state
-		showStatus("Application Ready", EnhancedUITheme.UIState.SUCCESS);
+		try {
+			setLayout(new BorderLayout());
+			setBorder(new EmptyBorder(8, 12, 8, 12));
+			setOpaque(false);
+			
+			statusLabel = new JLabel("Ready");
+			statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+			statusLabel.setForeground(Color.WHITE);
+			add(statusLabel, BorderLayout.CENTER);
+			
+			// Timer for fade animations
+			fadeTimer = new Timer(16, new FadeAnimator()); // ~60fps
+			
+			long elapsed = System.currentTimeMillis() - startTime;
+			log.debug("EnhancedStatusDisplay initialized in {}ms", elapsed);
+			
+			// Initial state - use invokeLater to avoid blocking
+			javax.swing.SwingUtilities.invokeLater(() -> {
+				try {
+					showStatus("Application Ready", EnhancedUITheme.UIState.SUCCESS);
+					log.debug("Initial status message set");
+				} catch (Exception e) {
+					log.warn("Failed to set initial status message", e);
+				}
+			});
+		} catch (Exception e) {
+			log.error("Failed to initialize EnhancedStatusDisplay", e);
+			throw new RuntimeException("EnhancedStatusDisplay initialization failed", e);
+		}
 	}
 	
 	/**
@@ -69,21 +87,31 @@ public class EnhancedStatusDisplay extends JPanel
 	 */
 	public void showStatus(String message, EnhancedUITheme.UIState state, int duration)
 	{
-		currentState = state;
-		statusLabel.setText(message);
+		// Ensure this runs on EDT to avoid threading issues
+		if (!javax.swing.SwingUtilities.isEventDispatchThread()) {
+			javax.swing.SwingUtilities.invokeLater(() -> showStatus(message, state, duration));
+			return;
+		}
 		
-		// Reset opacity and show
-		opacity = 1.0f;
-		fadeOut = false;
-		setVisible(true);
-		repaint();
-		
-		// Schedule fade out
-		Timer displayTimer = new Timer(duration, e -> startFadeOut());
-		displayTimer.setRepeats(false);
-		displayTimer.start();
-		
-		log.trace("Status displayed: {} ({})", message, state);
+		try {
+			currentState = state;
+			statusLabel.setText(message);
+			
+			// Reset opacity and show
+			opacity = 1.0f;
+			fadeOut = false;
+			setVisible(true);
+			repaint();
+			
+			// Schedule fade out
+			Timer displayTimer = new Timer(duration, e -> startFadeOut());
+			displayTimer.setRepeats(false);
+			displayTimer.start();
+			
+			log.trace("Status displayed: {} ({})", message, state);
+		} catch (Exception e) {
+			log.warn("Failed to show status message: {}", message, e);
+		}
 	}
 	
 	/**

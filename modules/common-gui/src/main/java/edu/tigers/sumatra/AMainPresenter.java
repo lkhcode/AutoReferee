@@ -5,6 +5,7 @@ package edu.tigers.sumatra;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import edu.tigers.sumatra.diagnostics.StartupDiagnostics;
 import edu.tigers.sumatra.model.SumatraModel;
 import edu.tigers.sumatra.ui.EnhancedUITheme;
 import edu.tigers.sumatra.ui.EnhancedViewManager;
@@ -75,49 +76,97 @@ public abstract class AMainPresenter<T extends AMainFrame>
 
 	static
 	{
-		// Apply enhanced theme for better UI appearance
-		EnhancedUITheme.applyEnhancedTheme();
+		// Start diagnostics early to track initialization
+		StartupDiagnostics.beginStartupDiagnostics();
 		
-		InfoNodeLookAndFeel.install();
-		FlatIntelliJLaf.installLafInfo();
-		FlatLightLaf.installLafInfo();
+		long startTime = System.currentTimeMillis();
+		log.info("Starting UI initialization");
+		StartupDiagnostics.checkpoint("UI initialization started");
+		
+		try {
+			// Apply enhanced theme for better UI appearance
+			EnhancedUITheme.applyEnhancedTheme();
+			StartupDiagnostics.checkpoint("Enhanced UI theme applied");
+			
+			InfoNodeLookAndFeel.install();
+			FlatIntelliJLaf.installLafInfo();
+			FlatLightLaf.installLafInfo();
+			StartupDiagnostics.checkpoint("Look and Feel installed");
 
-		ScalingUtil.updateBaselineSize(new JTextPane().getFont().getSize());
-		// JMenuBar on the macOS menu bar
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		
-		log.info("UI theme and scaling configuration completed");
+			ScalingUtil.updateBaselineSize(new JTextPane().getFont().getSize());
+			// JMenuBar on the macOS menu bar
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+			
+			long elapsed = System.currentTimeMillis() - startTime;
+			log.info("UI theme and scaling configuration completed in {}ms", elapsed);
+			StartupDiagnostics.checkpoint("UI theme configuration completed");
+		} catch (Exception e) {
+			long elapsed = System.currentTimeMillis() - startTime;
+			log.error("UI initialization failed after {}ms", elapsed, e);
+			StartupDiagnostics.checkpoint("UI initialization failed: " + e.getMessage());
+			// Continue with basic setup if enhanced theme fails
+		}
 	}
 
 
 	protected AMainPresenter(T mainFrame, List<SumatraView> views, String name)
 	{
-		this.views = Collections.unmodifiableList(views);
-		this.mainFrame = mainFrame;
-		this.rootWindow = createRootWindow(views);
-		this.name = name;
-		layoutConfigPath = LAYOUT_CONFIG_PATH.resolve(name);
+		long startTime = System.currentTimeMillis();
+		log.info("Initializing AMainPresenter with {} views", views.size());
+		
+		try {
+			this.views = Collections.unmodifiableList(views);
+			this.mainFrame = mainFrame;
+			this.name = name;
+			layoutConfigPath = LAYOUT_CONFIG_PATH.resolve(name);
+			
+			log.debug("Creating root window...");
+			this.rootWindow = createRootWindow(views);
+			
+			log.debug("Initializing enhanced view manager...");
+			// Initialize enhanced view manager
+			this.viewManager = new EnhancedViewManager(views);
+			this.viewManager.setStatusDisplay(mainFrame.getStatusDisplay());
 
-		// Initialize enhanced view manager
-		this.viewManager = new EnhancedViewManager(views);
-		this.viewManager.setStatusDisplay(mainFrame.getStatusDisplay());
+			log.debug("Setting up UI components...");
+			rootWindow.addListener(new ViewUpdater());
+			mainFrame.add(rootWindow, BorderLayout.CENTER);
 
-		rootWindow.addListener(new ViewUpdater());
-		mainFrame.add(rootWindow, BorderLayout.CENTER);
+			updateLayoutItems();
+			initializeViews();
 
-		updateLayoutItems();
-		initializeViews();
+			loadPosition();
+			onLoadLayout(LAST_LAYOUT_FILE);
 
-		loadPosition();
-		onLoadLayout(LAST_LAYOUT_FILE);
+			mainFrame.getMenuItemLayoutSave().addActionListener(e -> onSaveLayout());
+			mainFrame.addWindowListener(new WindowListener());
 
-		mainFrame.getMenuItemLayoutSave().addActionListener(e -> onSaveLayout());
-		mainFrame.addWindowListener(new WindowListener());
+			// Show startup message asynchronously to avoid blocking
+			javax.swing.SwingUtilities.invokeLater(() -> {
+				try {
+					mainFrame.getStatusDisplay().showSuccess("Application initialized with " + views.size() + " views");
+					log.debug("Startup message displayed");
+					StartupDiagnostics.checkpoint("Startup message displayed");
+					
+					// Complete startup diagnostics
+					StartupDiagnostics.completeStartupDiagnostics();
+				} catch (Exception e) {
+					log.warn("Failed to show startup message", e);
+					StartupDiagnostics.checkpoint("Failed to show startup message: " + e.getMessage());
+				}
+			});
 
-		// Show startup message
-		mainFrame.getStatusDisplay().showSuccess("Application initialized with " + views.size() + " views");
-
-		mainFrame.setVisible(true);
+			mainFrame.setVisible(true);
+			StartupDiagnostics.checkpoint("Main frame set visible");
+			
+			long elapsed = System.currentTimeMillis() - startTime;
+			log.info("AMainPresenter initialization completed in {}ms", elapsed);
+		} catch (Exception e) {
+			long elapsed = System.currentTimeMillis() - startTime;
+			log.error("AMainPresenter initialization failed after {}ms", elapsed, e);
+			StartupDiagnostics.checkpoint("AMainPresenter initialization failed: " + e.getMessage());
+			throw new RuntimeException("Failed to initialize main presenter", e);
+		}
 	}
 
 
