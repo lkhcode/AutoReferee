@@ -3,6 +3,8 @@
 ![GitHub Release](https://img.shields.io/github/v/release/herryli/AutoReferee)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/lkhcode/AutoReferee/build.yml)
 ![Docker Image Version](https://img.shields.io/docker/v/herryli124/auto-referee)
+![UI Enhanced](https://img.shields.io/badge/UI-Enhanced%20✨-brightgreen)
+![Modern Design](https://img.shields.io/badge/Design-Modern-blue)
 
 
 
@@ -31,8 +33,38 @@
 ## 运行
 根据你的系统平台运行 `./run.sh` 或 `run.bat`。
 
-你可以传入 `-h` 参数来查看可用的命令行参数。
+### 命令行参数
+你可以使用以下命令行参数来配置AutoReferee的运行模式：
 
+```bash
+./run.sh [选项]
+```
+
+#### 可用选项：
+- `-a, --active` : 激活自动裁判的主动模式
+- `-c, --ci` : 使用CI模式运行
+- `-hl, --headless` : 无GUI模式运行（仅命令行）
+- `-ra, --refereeAddress=<address:port>` : 设置游戏控制器(GC)的地址和端口
+- `-ta, --trackerAddress=<address:port>` : 设置追踪器的地址和端口  
+- `-va, --visionAddress=<address:port>` : 设置视觉系统的地址和端口
+- `-h, --help` : 显示帮助信息
+
+#### 使用示例：
+```bash
+# 以主动模式运行
+./run.sh --active
+
+# 无GUI模式运行
+./run.sh --headless
+
+# 指定自定义的视觉和裁判地址
+./run.sh --visionAddress=224.5.23.2:10006 --refereeAddress=224.5.23.1:10003
+
+# 组合多个参数
+./run.sh --active --visionAddress=224.5.23.2:10006 --refereeAddress=224.5.23.1:10003
+```
+
+### Docker 
 你也可以尝试通过 docker 运行。我提供了两个 docker 镜像：
  * `herryli124/auto-referee` - 不带 GUI 的 autoReferee
  * `herryli124/auto-referee-vnc` - 带 GUI 的 autoReferee
@@ -82,13 +114,24 @@ GUI 由多个可以动态排列的视图组成。如果某个视图没有显示�
 ## 配置
 所有配置选项都可以通过**Cfg**选项卡访问。**Cfg**选项卡本身包含多个子选项卡，用于修改应用程序不同部分的参数。你可以进行必要的修改并**Apply**它们。要使更改永久生效，请按**Save**将其写入磁盘。按**Reload**重新读取所有当前应用的值。
 
-### 视觉端口
-默认情况下，应用程序将尝试从 **224.5.23.2:10006** 接收视觉帧。
-你可以在 [config/moduli/autoreferee.xml](config/moduli/autoreferee.xml) 中更改默认地址和端口。
+### 网络配置
 
-## 裁判端口
+#### 视觉端口
+默认情况下，应用程序将尝试从 **224.5.23.2:10006** 接收视觉帧。
+你可以通过以下方式更改：
+- 命令行参数：`--visionAddress=地址:端口`
+- 配置文件：[config/moduli/autoreferee.xml](config/moduli/autoreferee.xml)
+
+#### 裁判端口
 默认情况下，应用程序将尝试从 **224.5.23.1:10003** 接收裁判消息。
-你可以在 [config/moduli/autoreferee.xml](config/moduli/autoreferee.xml) 中更改默认地址和端口。
+你可以通过以下方式更改：
+- 命令行参数：`--refereeAddress=地址:端口`
+- 配置文件：[config/moduli/autoreferee.xml](config/moduli/autoreferee.xml)
+
+#### 追踪器端口
+追踪器用于发布视觉追踪数据包，可以通过以下方式配置：
+- 命令行参数：`--trackerAddress=地址:端口`
+- 配置文件：[config/moduli/autoreferee.xml](config/moduli/autoreferee.xml)
 
 ### 自动裁判检测器
 可以通过**autoreferee**配置部分更改自动裁判的行为。它包含检测器的参数。
