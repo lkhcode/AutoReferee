@@ -3,8 +3,8 @@ network:
   publish-address: 224.5.23.1:10003
   # set a network IP to only publish to that network - else messages will be published to all network interfaces
   publish-nif: ""
-  vision-address: 224.5.23.2:11006
-  tracker-address: 224.5.23.2:11010
+  vision-address: 224.5.23.2:10006
+  tracker-address: 224.5.23.2:10010
   skip-interfaces: [ ]
 server:
   auto-ref:
