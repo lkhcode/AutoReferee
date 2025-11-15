@@ -88,7 +88,7 @@ distributions {
 
 githubRelease {
     token System.getenv("GITHUB_TOKEN") ?: ""
-    owner "TIGERs-Mannheim"
+    owner "lkhcode"
     targetCommitish.set("master")
     repo.set("AutoReferee")
     releaseAssets distZip
