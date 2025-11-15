@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -218,6 +219,32 @@ public class GameControllerProtocol
 	public boolean isConnected()
 	{
 		return connected;
+	}
+
+	/**
+	 * Get the local address (IP) of the socket used for the connection.
+	 * Falls back to the system local host address or configured hostname when not available.
+	 *
+	 * @return local IP address as string
+	 */
+	public String getLocalAddress()
+	{
+		try
+		{
+			if (socket != null && socket.getLocalAddress() != null)
+			{
+				return socket.getLocalAddress().getHostAddress();
+			}
+			InetAddress local = InetAddress.getLocalHost();
+			if (local != null)
+			{
+				return local.getHostAddress();
+			}
+		} catch (Exception e)
+		{
+			log.warn("Could not determine local address", e);
+		}
+		return hostname;
 	}
 
 	@FunctionalInterface

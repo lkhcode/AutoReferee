@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class AutoRefToGameControllerConnector implements Runnable
 {
 	private static final Logger log = LogManager.getLogger(AutoRefToGameControllerConnector.class);
-	private static final String AUTO_REF_ID = "TIGERs AutoRef";
+	private static final String AUTO_REF_ID = "Robocup-SSL-China AutoRef v1.0";
 
 	private GameControllerProtocol protocol;
 	private ExecutorService executorService;
@@ -42,12 +42,14 @@ public class AutoRefToGameControllerConnector implements Runnable
 
 	private String nextToken;
 	private MessageSigner signer;
+	private final String hostname;
 
 
 	public AutoRefToGameControllerConnector(final String hostname, final int port)
 	{
-		protocol = new GameControllerProtocol(hostname, port);
-		protocol.addConnectedHandler(this::register);
+ 		this.hostname = hostname;
+ 		protocol = new GameControllerProtocol(hostname, port);
+ 		protocol.addConnectedHandler(this::register);
 
 		commandQueue = new LinkedBlockingDeque<>();
 		try
@@ -84,9 +86,12 @@ public class AutoRefToGameControllerConnector implements Runnable
 
 		nextToken = reply.getControllerReply().getNextToken();
 
-		SslGcRconAutoref.AutoRefRegistration.Builder registration = SslGcRconAutoref.AutoRefRegistration
-				.newBuilder()
-				.setIdentifier(AUTO_REF_ID);
+	// Use the client's local IP address (the address used for the socket) instead of the literal
+	// constructor hostname (which may be "localhost"). Falls back to hostname if detection fails.
+	String localAddr = protocol.getLocalAddress();
+	SslGcRconAutoref.AutoRefRegistration.Builder registration = SslGcRconAutoref.AutoRefRegistration
+		.newBuilder()
+		.setIdentifier(AUTO_REF_ID + "@" + localAddr);
 		registration.getSignatureBuilder().setToken(nextToken).setPkcs1V15(ByteString.EMPTY);
 		byte[] signature = signer.sign(registration.build().toByteArray());
 		registration.getSignatureBuilder().setPkcs1V15(ByteString.copyFrom(signature));

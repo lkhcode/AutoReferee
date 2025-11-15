@@ -8,13 +8,13 @@ network:
   skip-interfaces: [ ]
 server:
   auto-ref:
-    address: :11007
+    address: :10007
     trusted-keys-dir: config/trusted_keys/auto_ref
   team:
-    address: :11008
+    address: :10008
     trusted-keys-dir: config/trusted_keys/team
   remote-control:
-    address: :11011
+    address: :10011
     trusted-keys-dir: config/trusted_keys/remote-control
   ci:
     address: :11009

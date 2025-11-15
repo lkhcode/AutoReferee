@@ -13,7 +13,7 @@ public class AutoRefMainFrame extends AMainFrame
 {
 	public AutoRefMainFrame()
 	{
-		setTitle("TIGERs AutoReferee " + SumatraModel.getVersion());
+		setTitle("RoboCup-SSL-China AutoReferee - based on TIGERs AutoReferee" + SumatraModel.getVersion());
 		setIconImage("/whistle.png");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
