@@ -103,7 +103,7 @@ message GameEvent {
         // can not be used as long as autoRefs do not judge pushing
         BotPushedBot bot_pushed_bot_skipped = 25 [deprecated = true];
         // rule removed
-        DefenderInDefenseAreaPartially defender_in_defense_area_partially = 30 [deprecated = true];
+        DefenderInDefenseAreaPartially defender_in_defense_area_partially = 30;
         // the referee msg already indicates this
         MultiplePlacementFailures multiple_placement_failures = 33 [deprecated = true];
     }
@@ -565,7 +565,7 @@ message GameEvent {
         ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED = 40 [deprecated = true];
         BOT_CRASH_UNIQUE_SKIPPED = 23 [deprecated = true];
         BOT_PUSHED_BOT_SKIPPED = 25 [deprecated = true];
-        DEFENDER_IN_DEFENSE_AREA_PARTIALLY = 30 [deprecated = true];
+        DEFENDER_IN_DEFENSE_AREA_PARTIALLY = 30;
         MULTIPLE_PLACEMENT_FAILURES = 33 [deprecated = true];
     }
 }

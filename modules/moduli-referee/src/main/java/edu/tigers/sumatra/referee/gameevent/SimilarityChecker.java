@@ -128,6 +128,10 @@ public class SimilarityChecker
 		register(DefenderInDefenseArea.class, Objects::equals, DefenderInDefenseArea::getBot);
 		register(DefenderInDefenseArea.class, this::similarLocation, DefenderInDefenseArea::getLocation);
 
+		register(DefenderInDefenseAreaPartially.class, Objects::equals, DefenderInDefenseAreaPartially::getTeam);
+		register(DefenderInDefenseAreaPartially.class, Objects::equals, DefenderInDefenseAreaPartially::getBot);
+		register(DefenderInDefenseAreaPartially.class, this::similarLocation, DefenderInDefenseAreaPartially::getLocation);
+
 		register(DefenderTooCloseToKickPoint.class, Objects::equals, DefenderTooCloseToKickPoint::getTeam);
 		register(DefenderTooCloseToKickPoint.class, Objects::equals, DefenderTooCloseToKickPoint::getBot);
 		register(DefenderTooCloseToKickPoint.class, this::similarLocation, DefenderTooCloseToKickPoint::getLocation);

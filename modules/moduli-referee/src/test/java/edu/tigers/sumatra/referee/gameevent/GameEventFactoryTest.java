@@ -43,6 +43,7 @@ public class GameEventFactoryTest
 		gameEvents.add(new BotTippedOver(botId(), location(), location()));
 		gameEvents.add(new BotTooFastInStop(botId(), location(), number()));
 		gameEvents.add(new DefenderInDefenseArea(botId(), location(), number()));
+		gameEvents.add(new DefenderInDefenseAreaPartially(botId(), location(), number()));
 		gameEvents.add(new DefenderTooCloseToKickPoint(botId(), location(), number()));
 		gameEvents.add(new Goal(team(), botId(), location(), location(), number(), intNumber(), timestamp()));
 		gameEvents.add(new InvalidGoal(team(), botId(), location(), location(), number(), intNumber(), timestamp()));

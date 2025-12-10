@@ -16,6 +16,7 @@ import edu.tigers.sumatra.math.vector.IVector2;
 import edu.tigers.sumatra.referee.data.EGameState;
 import edu.tigers.sumatra.referee.gameevent.AttackerTouchedBallInDefenseArea;
 import edu.tigers.sumatra.referee.gameevent.DefenderInDefenseArea;
+import edu.tigers.sumatra.referee.gameevent.DefenderInDefenseAreaPartially;
 import edu.tigers.sumatra.referee.gameevent.IGameEvent;
 
 import java.util.HashMap;
@@ -142,19 +143,35 @@ public class BotInDefenseAreaDetector extends AGameEventDetector
 			return Optional.of(new AttackerTouchedBallInDefenseArea(curKickerId, curKicker.getPos(), distance));
 		}
 		if (curKickerId != frame.getRefereeMsg().getKeeperBotID(curKickerColor)
-				&& !defenderIsPushed(curKickerId, curKicker.getPos())
-				&& ownPenArea.withMargin(-Geometry.getBotRadius()).isPointInShape(curKicker.getPos()))
+				&& !defenderIsPushed(curKickerId, curKicker.getPos()))
 		{
-			/*
-			 * Multiple Defender:
-			 * Defender touched the ball while being located entirely inside the own defense area
-			 */
-			lastViolators.put(curKickerId, curKicker);
+			if (ownPenArea.withMargin(-Geometry.getBotRadius()).isPointInShape(curKicker.getPos()))
+			{
+				/*
+				 * Multiple Defender:
+				 * Defender touched the ball while being located entirely inside the own defense area
+				 * Results in a penalty kick
+				 */
+				lastViolators.put(curKickerId, curKicker);
 
-			double distance = ownPenArea.withMargin(Geometry.getBotRadius())
-					.distanceToNearestPointOutside(curKicker.getPos());
+				double distance = ownPenArea.withMargin(Geometry.getBotRadius())
+						.distanceToNearestPointOutside(curKicker.getPos());
 
-			return Optional.of(new DefenderInDefenseArea(curKickerId, curKicker.getPos(), distance));
+				return Optional.of(new DefenderInDefenseArea(curKickerId, curKicker.getPos(), distance));
+			}
+			else if (ownPenArea.withMargin(getPartialTouchMargin()).isPointInShape(curKicker.getPos()))
+			{
+				/*
+				 * Defender touched the ball while being located partially inside the own defense area
+				 * Results in a direct free kick and yellow card
+				 */
+				lastViolators.put(curKickerId, curKicker);
+
+				double distance = ownPenArea.withMargin(Geometry.getBotRadius())
+						.distanceToNearestPointOutside(curKicker.getPos());
+
+				return Optional.of(new DefenderInDefenseAreaPartially(curKickerId, curKicker.getPos(), distance));
+			}
 		}
 		return Optional.empty();
 	}
