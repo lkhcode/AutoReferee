@@ -17,3 +17,10 @@ cache
 out
 **/test/generated_tests
 **/integrationTest/generated
+
+**/bin/
+**/out/
+**/tmp/
+**/generated/
+**/*.stream
+.vscode/
