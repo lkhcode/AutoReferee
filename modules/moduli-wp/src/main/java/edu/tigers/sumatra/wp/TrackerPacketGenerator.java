@@ -18,10 +18,14 @@ import edu.tigers.sumatra.wp.proto.SslVisionDetectionTracked;
 import edu.tigers.sumatra.wp.proto.SslVisionWrapperTracked;
 import lombok.RequiredArgsConstructor;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -31,7 +35,7 @@ public class TrackerPacketGenerator
 	private final String sourceName;
 	private static final Set<SslVisionDetectionTracked.Capability> CAPABILITIES = new HashSet<>();
 	private int frameNumber = 0;
-	private final String uuid = UUID.randomUUID().toString();
+	private final String uuid = buildUuid();
 
 	static
 	{
@@ -57,6 +61,56 @@ public class TrackerPacketGenerator
 		wrapper.setSourceName(sourceName);
 		wrapper.setTrackedFrame(frame);
 		return wrapper.build();
+	}
+
+
+	private String buildUuid()
+	{
+		String ip = resolveLocalIpv4();
+		return "Robocup-SSL-China_TrackerSource@" + ip;
+	}
+
+
+	private String resolveLocalIpv4()
+	{
+		try
+		{
+			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			while (interfaces.hasMoreElements())
+			{
+				NetworkInterface networkInterface = interfaces.nextElement();
+				if (!networkInterface.isUp() || networkInterface.isLoopback())
+				{
+					continue;
+				}
+				Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+				while (addresses.hasMoreElements())
+				{
+					InetAddress address = addresses.nextElement();
+					if (address instanceof Inet4Address && !address.isLoopbackAddress())
+					{
+						return address.getHostAddress();
+					}
+				}
+			}
+		} catch (SocketException e)
+		{
+			// Fall through to fallback below.
+		}
+
+		try
+		{
+			InetAddress localHost = InetAddress.getLocalHost();
+			if (localHost instanceof Inet4Address)
+			{
+				return localHost.getHostAddress();
+			}
+		} catch (Exception e)
+		{
+			// Ignore and use fallback below.
+		}
+
+		return "unknown";
 	}
 
 
