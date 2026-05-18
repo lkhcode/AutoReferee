@@ -1,6 +1,6 @@
 # TIGERs Mannheim 自动裁判盒
 
-![GitHub Release](https://img.shields.io/github/v/release/herryli/AutoReferee)
+![GitHub Release](https://img.shields.io/github/v/release/lkhcode/AutoReferee)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/lkhcode/AutoReferee/build.yml)
 ![Docker Image Version](https://img.shields.io/docker/v/herryli124/auto-referee)
 ![UI Enhanced](https://img.shields.io/badge/UI-Enhanced%20✨-brightgreen)
