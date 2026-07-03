@@ -89,7 +89,7 @@ class AutoRefIntegrationTest
 
 		String name = testInfo.getTestMethod().toString();
 		PersistenceDb db = PersistenceDb.withCustomLocation(Paths.get("../../" + PersistenceDb.getDefaultBasePath(),
-				PersistenceDb.getDefaultName("FRIENDLY", "NORMAL_FIRST_HALF", "yellow", "blue") + "_" + name));
+				PersistenceDb.getDefaultName("FRIENDLY", "yellow", "blue") + "_" + name));
 		db.add(PersistenceLogCohort.class, EPersistenceKeyType.ARBITRARY);
 		db.add(PersistenceShapeMapFrame.class, EPersistenceKeyType.SUMATRA_TIMESTAMP);
 		db.add(WorldFrameWrapper.class, EPersistenceKeyType.SUMATRA_TIMESTAMP);

@@ -29,7 +29,6 @@ public class RecordManager extends AModule implements IRefereeObserver
 	private static final Logger log = LogManager.getLogger(RecordManager.class.getName());
 	private final List<IRecordObserver> observers = new CopyOnWriteArrayList<>();
 	private final List<IRecorderHook> hooks = new CopyOnWriteArrayList<>();
-	private long lastCommandCounter = -1;
 	private PersistenceAsyncRecorder recorder = null;
 	protected String teamYellow = "";
 	protected String teamBlue = "";
@@ -127,16 +126,6 @@ public class RecordManager extends AModule implements IRefereeObserver
 	}
 
 
-	private boolean isNoGameStage(final SslGcRefereeMessage.Referee refMsg)
-	{
-		return switch (refMsg.getStage())
-		{
-			case EXTRA_HALF_TIME, NORMAL_HALF_TIME, PENALTY_SHOOTOUT_BREAK, POST_GAME, EXTRA_TIME_BREAK -> true;
-			default -> false;
-		};
-	}
-
-
 	@Override
 	public void onNewRefereeMsg(final SslGcRefereeMessage.Referee refMsg)
 	{
@@ -147,11 +136,9 @@ public class RecordManager extends AModule implements IRefereeObserver
 			matchType = refMsg.getMatchType().toString();
 			matchStage = refMsg.getStage().toString().replace("_PRE", "");
 		}
-		if (autoRecord && SumatraModel.getInstance().isTournamentMode() && (refMsg != null)
-				&& refMsg.getCommandCounter() != lastCommandCounter)
+		if (autoRecord && SumatraModel.getInstance().isTournamentMode() && refMsg != null)
 		{
 			startStopRecording(refMsg);
-			lastCommandCounter = refMsg.getCommandCounter();
 		}
 	}
 
@@ -163,7 +150,7 @@ public class RecordManager extends AModule implements IRefereeObserver
 						|| (isPreStage(refMsg) && (refMsg.getCommand() != SslGcRefereeMessage.Referee.Command.HALT))))
 		{
 			startRecording();
-		} else if (isRecording() && isNoGameStage(refMsg))
+		} else if (isRecording() && refMsg.getStage() == SslGcRefereeMessage.Referee.Stage.POST_GAME)
 		{
 			stopRecording();
 		}
@@ -279,7 +266,7 @@ public class RecordManager extends AModule implements IRefereeObserver
 	 */
 	private PersistenceDb newPersistenceDb()
 	{
-		PersistenceDb db = PersistenceDb.withDefaultLocation(matchType, matchStage, teamYellow, teamBlue);
+		PersistenceDb db = PersistenceDb.withDefaultLocation(matchType, teamYellow, teamBlue);
 		onNewPersistenceDb(db);
 		return db;
 	}
