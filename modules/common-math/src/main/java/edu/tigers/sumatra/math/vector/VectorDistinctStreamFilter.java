@@ -16,7 +16,6 @@ public class VectorDistinctStreamFilter
 	public static Predicate<IVector> byIsCloseTo()
 	{
 		return byIsCloseTo(SumatraMath.getEqualTol());
-
 	}
 
 
