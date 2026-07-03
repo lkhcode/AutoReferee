@@ -24,4 +24,11 @@ public class PersistenceCamDetectionFrame implements PersistenceTable.IEntry<Per
 	{
 		return timestamp;
 	}
+
+
+	@Override
+	public void merge(PersistenceCamDetectionFrame other)
+	{
+		camFrames.putAll(other.camFrames);
+	}
 }
