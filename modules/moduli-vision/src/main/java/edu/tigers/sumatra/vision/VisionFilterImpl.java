@@ -91,6 +91,11 @@ public class VisionFilterImpl extends AVisionFilter
 
 	private void publish()
 	{
+		if (lastFrame.getTimestamp() == 0)
+		{
+			return;
+		}
+
 		try
 		{
 			publishFilteredVisionFrame(lastFrame);
