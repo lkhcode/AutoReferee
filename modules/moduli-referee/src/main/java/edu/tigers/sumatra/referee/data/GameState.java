@@ -27,7 +27,6 @@ public class GameState
 	ETeamColor nextForTeam;
 	@NonNull
 	ETeamColor ourTeam;
-	boolean penaltyShootout;
 	@Getter(AccessLevel.NONE)
 	IVector2 ballPlacementPosition;
 
@@ -55,7 +54,6 @@ public class GameState
 		forTeam = ETeamColor.NEUTRAL;
 		nextForTeam = ETeamColor.NEUTRAL;
 		ourTeam = ETeamColor.NEUTRAL;
-		penaltyShootout = false;
 		ballPlacementPosition = null;
 	}
 

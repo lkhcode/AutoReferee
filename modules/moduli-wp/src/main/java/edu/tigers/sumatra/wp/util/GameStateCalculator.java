@@ -96,13 +96,11 @@ public class GameStateCalculator
 
 	private void processStage(final Stage stage, final GameState.GameStateBuilder builder)
 	{
-		builder.withPenaltyShootout(false);
 		switch (stage)
 		{
 			case NORMAL_HALF_TIME, EXTRA_TIME_BREAK, EXTRA_HALF_TIME, PENALTY_SHOOTOUT_BREAK ->
 					builder.withState(EGameState.BREAK).withForTeam(ETeamColor.NEUTRAL);
 			case POST_GAME -> builder.withState(EGameState.POST_GAME).withForTeam(ETeamColor.NEUTRAL);
-			case PENALTY_SHOOTOUT -> builder.withPenaltyShootout(true);
 			default ->
 			{
 				if (lastGameState.getState() == EGameState.BREAK || lastGameState.getState() == EGameState.POST_GAME)
