@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -29,7 +28,7 @@ public class ShapeMap
 	 */
 	public ShapeMap()
 	{
-		this(new ConcurrentHashMap<>());
+		this(new HashMap<>());
 	}
 
 
