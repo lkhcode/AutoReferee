@@ -1,7 +1,6 @@
 package edu.tigers.sumatra.bot;
 
 import edu.tigers.sumatra.bot.params.BotParams;
-import edu.tigers.sumatra.bot.params.IBotParams;
 import edu.tigers.sumatra.ids.BotID;
 import edu.tigers.sumatra.math.IMirrorable;
 import edu.tigers.sumatra.math.vector.IVector3;
@@ -60,7 +59,7 @@ public class RobotInfo implements IMirrorable<RobotInfo>
 	private final boolean barrierInterrupted;
 	@Getter
 	@NonNull
-	private final IBotParams botParams;
+	private final BotParams botParams;
 	@Getter
 	private final ERobotHealthState healthState;
 	@Getter
