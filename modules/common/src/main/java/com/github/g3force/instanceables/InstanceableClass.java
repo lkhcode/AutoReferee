@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;
 /**
  * An {@link InstanceableClass} can be used to create an object from a class and a set of parameters.
  */
-public class InstanceableClass<T>
+public class InstanceableClass<T> implements IInstanceable
 {
 	private final Class<T> impl;
 	private final List<InstanceableParameter> ctorParams = new ArrayList<>();
@@ -100,6 +100,7 @@ public class InstanceableClass<T>
 	 * @return a new instance
 	 * @throws NotCreateableException if the instance could not be created
 	 */
+	@Override
 	public T newInstance(final List<String> values)
 	{
 		if (values.size() != ctorParams.size() + setterParams.size())
@@ -132,6 +133,7 @@ public class InstanceableClass<T>
 	 * @return a new instance
 	 * @throws NotCreateableException if the instance could not be created
 	 */
+	@Override
 	public T newDefaultInstance()
 	{
 		if (ctorParams.isEmpty())
@@ -171,6 +173,7 @@ public class InstanceableClass<T>
 	/**
 	 * @return a list with the constructor params and the setters
 	 */
+	@Override
 	public List<IInstanceableParameter> getAllParams()
 	{
 		List<IInstanceableParameter> allParams = new ArrayList<>(ctorParams);
@@ -198,9 +201,7 @@ public class InstanceableClass<T>
 	}
 
 
-	/**
-	 * @return the impl
-	 */
+	@Override
 	public final Class<?> getImpl()
 	{
 		return impl;

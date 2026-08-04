@@ -1,14 +1,14 @@
 package com.github.g3force.instanceables;
 
 /**
- * Implement this in an enum that provides {@link InstanceableClass}s
+ * Implement this in an enum that provides {@link IInstanceable}s
  */
 public interface IInstanceableEnum
 {
 	/**
 	 * @return the instance class of the enum value
 	 */
-	InstanceableClass<?> getInstanceableClass();
+	IInstanceable getInstanceableClass();
 
 
 	/**
