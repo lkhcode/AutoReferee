@@ -83,6 +83,18 @@ docker run --net host  -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY 
 ```shell
 docker run --net host herryli124/auto-referee
 ```
+
+## 集成测试
+
+可通过以下命令运行赛事共享的 [自动裁判集成测试](https://gitlab.com/robocup-small-size/autoref-tests)：
+
+```shell
+git clone https://gitlab.com/robocup-small-size/autoref-tests.git modules/moduli-autoreferee/config/autoref-tests
+git lfs install
+git -C modules/moduli-autoreferee/config/autoref-tests lfs pull
+./gradlew --stacktrace check integrationTest
+```
+
 ## IntelliJ 配置
 IntelliJ 可以读取 Gradle 配置并使用 Gradle 执行构建。
 请确保在 Build, Execution, Deployment -> Build Tools -> Gradle 下配置 Gradle 用于构建和测试。
@@ -146,5 +158,3 @@ GUI 由多个可以动态排列的视图组成。如果某个视图没有显示�
 自动裁判系统内置了官方的 ssl-game-controller。要激活它，请在 [config/moduli/autoreferee.xml](config/moduli/autoreferee.xml) 中将 `gameController` 改为 true。
 自动裁判系统将在内部启动游戏控制器并连接到其 websocket API，以便能够通过**Ref**视图发送一些基本命令。
 该视图还包含一个启动 GC 的 UI 的按钮。
-
-

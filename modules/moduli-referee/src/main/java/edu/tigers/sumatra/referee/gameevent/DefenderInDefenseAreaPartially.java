@@ -33,7 +33,7 @@ public class DefenderInDefenseAreaPartially extends AGameEvent
 		this.team = toTeamColor(event.getDefenderInDefenseAreaPartially().getByTeam());
 		this.bot = event.getDefenderInDefenseAreaPartially().getByBot();
 		this.location = toVector(event.getDefenderInDefenseAreaPartially().getLocation());
-		this.distance = toDistance(event.getDefenderInDefenseArea().getDistance());
+		this.distance = toDistance(event.getDefenderInDefenseAreaPartially().getDistance());
 	}
 
 

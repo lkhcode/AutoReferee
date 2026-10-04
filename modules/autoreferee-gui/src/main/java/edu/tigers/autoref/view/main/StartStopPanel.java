@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2009 - 2018, DHBW Mannheim - TIGERs Mannheim
- */
 package edu.tigers.autoref.view.main;
 
 import java.awt.*;
@@ -18,10 +15,10 @@ import edu.tigers.sumatra.components.BasePanel;
 public class StartStopPanel extends BasePanel<StartStopPanel.IStartStopPanelObserver>
 {
 	private final Map<EAutoRefMode, ButtonModel> autoRefModeModels = new EnumMap<>(EAutoRefMode.class);
-	
+
 	private final ButtonGroup group = new ButtonGroup();
-	
-	
+
+
 	public StartStopPanel()
 	{
 		setupUI();
@@ -52,7 +49,7 @@ public class StartStopPanel extends BasePanel<StartStopPanel.IStartStopPanelObse
 		active.addActionListener(e -> autoRefModeChanged(EAutoRefMode.ACTIVE));
 		group.add(active);
 		add(active);
-		
+
 		autoRefModeModels.put(EAutoRefMode.OFF, off.getModel());
 		autoRefModeModels.put(EAutoRefMode.PASSIVE, passive.getModel());
 		autoRefModeModels.put(EAutoRefMode.ACTIVE, active.getModel());
@@ -86,27 +83,27 @@ public class StartStopPanel extends BasePanel<StartStopPanel.IStartStopPanelObse
 		
 		return button;
 	}
-	
-	
+
+
 	private void autoRefModeChanged(EAutoRefMode mode)
 	{
 		informObserver(o -> o.changeMode(mode));
 	}
-	
-	
+
+
 	public void setAutoRefMode(EAutoRefMode mode)
 	{
 		group.setSelected(autoRefModeModels.get(mode), true);
 	}
-	
-	
+
+
 	@Override
 	public void setEnabled(final boolean enabled)
 	{
 		super.setEnabled(enabled);
 		Arrays.asList(getComponents()).forEach(c -> c.setEnabled(enabled));
 	}
-	
+
 	public interface IStartStopPanelObserver
 	{
 		void changeMode(final EAutoRefMode mode);

@@ -1,11 +1,14 @@
-/*
- * Copyright (c) 2009 - 2025, DHBW Mannheim - TIGERs Mannheim
- */
 package edu.tigers.sumatra;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import edu.tigers.sumatra.diagnostics.StartupDiagnostics;
+import com.formdev.flatlaf.intellijthemes.FlatGradiantoMidnightBlueIJTheme;
+import com.formdev.flatlaf.intellijthemes.FlatMaterialDesignDarkIJTheme;
+import com.formdev.flatlaf.intellijthemes.FlatSolarizedDarkIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDarkerIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMoonlightIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTNightOwlIJTheme;
 import edu.tigers.sumatra.model.SumatraModel;
 import edu.tigers.sumatra.ui.EnhancedUITheme;
 import edu.tigers.sumatra.ui.EnhancedViewManager;
@@ -26,11 +29,13 @@ import net.infonode.docking.util.MixedViewHandler;
 import net.infonode.docking.util.ViewMap;
 import net.infonode.gui.laf.InfoNodeLookAndFeel;
 import net.infonode.util.Direction;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -91,6 +96,13 @@ public abstract class AMainPresenter<T extends AMainFrame>
 			InfoNodeLookAndFeel.install();
 			FlatIntelliJLaf.installLafInfo();
 			FlatLightLaf.installLafInfo();
+			FlatMaterialDesignDarkIJTheme.installLafInfo();
+			FlatMTNightOwlIJTheme.installLafInfo();
+			FlatMTMoonlightIJTheme.installLafInfo();
+			FlatSolarizedDarkIJTheme.installLafInfo();
+			FlatGradiantoMidnightBlueIJTheme.installLafInfo();
+			FlatMTMaterialDarkerIJTheme.installLafInfo();
+			TIGERsTheme.installLafInfo();
 			StartupDiagnostics.checkpoint("Look and Feel installed");
 
 			ScalingUtil.updateBaselineSize(new JTextPane().getFont().getSize());
@@ -153,6 +165,15 @@ public abstract class AMainPresenter<T extends AMainFrame>
 				} catch (Exception e) {
 					log.warn("Failed to show startup message", e);
 					StartupDiagnostics.checkpoint("Failed to show startup message: " + e.getMessage());
+				}
+			});
+
+			SwingUtilities.invokeLater(() -> SwingUtilities.updateComponentTreeUI(mainFrame));
+			UIManager.addPropertyChangeListener(e ->
+			{
+				if ("lookAndFeel".equals(e.getPropertyName()))
+				{
+					SwingUtilities.invokeLater(() -> SwingUtilities.updateComponentTreeUI(mainFrame));
 				}
 			});
 

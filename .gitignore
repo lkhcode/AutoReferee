@@ -24,3 +24,7 @@ out
 **/generated/
 **/*.stream
 .vscode/
+.classpath
+.project
+.settings
+bin
