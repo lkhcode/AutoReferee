@@ -26,7 +26,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -356,7 +355,8 @@ public class ReplayControlPanel extends JPanel implements IReplayPositionObserve
 		speedSlider.setPaintTicks(true);
 		speedSlider.setPaintLabels(true);
 
-		speedSlider.setFont(new Font("", Font.PLAIN, 8));
+		speedSlider.setFont(speedSlider.getFont().deriveFont(
+				Math.max(11f, speedSlider.getFont().getSize2D() * 0.8f)));
 
 		Dictionary<Integer, JLabel> dict = new Hashtable<>();
 

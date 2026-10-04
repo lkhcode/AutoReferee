@@ -1,5 +1,6 @@
 package edu.tigers.autoref.view.main;
 
+import com.formdev.flatlaf.util.UIScale;
 import edu.tigers.autoreferee.engine.detector.EGameEventDetectorType;
 import edu.tigers.sumatra.components.BetterScrollPane;
 import edu.tigers.sumatra.components.EnumCheckBoxPanel;
@@ -29,8 +30,8 @@ public class AutoRefMainPanel extends JPanel
 
 	private void setupUI()
 	{
-		setLayout(new BorderLayout(10, 10));
-		setBorder(new EmptyBorder(10, 10, 10, 10));
+		setLayout(new BorderLayout(UIScale.scale(10), UIScale.scale(10)));
+		setBorder(new EmptyBorder(UIScale.scale(10), UIScale.scale(10), UIScale.scale(10), UIScale.scale(10)));
 		setBackground(new Color(248, 249, 250));
 
 		// 创建带标题的模式控制面板
@@ -39,8 +40,7 @@ public class AutoRefMainPanel extends JPanel
 			BorderFactory.createEtchedBorder(),
 			"运行模式",
 			TitledBorder.LEFT,
-			TitledBorder.TOP,
-			new Font("微软雅黑", Font.BOLD, 12)
+			TitledBorder.TOP
 		));
 		modePanel.setBackground(Color.WHITE);
 		
@@ -58,13 +58,12 @@ public class AutoRefMainPanel extends JPanel
 			BorderFactory.createEtchedBorder(),
 			"事件检测器配置",
 			TitledBorder.LEFT,
-			TitledBorder.TOP,
-			new Font("微软雅黑", Font.BOLD, 12)
+			TitledBorder.TOP
 		));
 		detectorWrapperPanel.setBackground(Color.WHITE);
 
 		JPanel panel = new JPanel();
-		panel.setLayout(new MigLayout("insets 10", "[grow]", "[grow]"));
+		panel.setLayout(new MigLayout("insets " + UIScale.scale(10), "[grow]", "[grow]"));
 		panel.setBackground(Color.WHITE);
 		panel.add(gameEventDetectorPanel, "grow x, top");
 		

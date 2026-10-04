@@ -1,5 +1,6 @@
 package edu.tigers.sumatra.gui.visualizer.view.options;
 
+import com.formdev.flatlaf.util.UIScale;
 import com.jidesoft.swing.CheckBoxTree;
 import edu.tigers.sumatra.components.BetterScrollPane;
 import edu.tigers.sumatra.util.ShortcutSuppressor;
@@ -133,22 +134,23 @@ public class ShapeSelectionPanel extends JPanel
 	private void updateIcons()
 	{
 		Color c = UIManager.getColor("Label.foreground");
+		int iconSize = UIScale.scale(16);
 
 		expandAll.setIcon(
-				IconFontSwing.buildIcon(FontAwesome.EXPAND, 16, c));
+				IconFontSwing.buildIcon(FontAwesome.EXPAND, iconSize, c));
 
 		collapseAll.setIcon(
-				IconFontSwing.buildIcon(FontAwesome.COMPRESS, 16, c));
+				IconFontSwing.buildIcon(FontAwesome.COMPRESS, iconSize, c));
 
 		open.setIcon(
-				IconFontSwing.buildIcon(FontAwesome.FOLDER_OPEN, 16, c));
+				IconFontSwing.buildIcon(FontAwesome.FOLDER_OPEN, iconSize, c));
 
 		save.setIcon(
-				IconFontSwing.buildIcon(FontAwesome.FLOPPY_O, 16, c));
+				IconFontSwing.buildIcon(FontAwesome.FLOPPY_O, iconSize, c));
 
 		add.setIcon(add.isSelected()
-				? IconFontSwing.buildIcon(FontAwesome.TIMES_CIRCLE_O, 16, Color.RED)
-				: IconFontSwing.buildIcon(FontAwesome.PLUS_CIRCLE, 16, new Color(0, 180, 0)));
+				? IconFontSwing.buildIcon(FontAwesome.TIMES_CIRCLE_O, iconSize, Color.RED)
+				: IconFontSwing.buildIcon(FontAwesome.PLUS_CIRCLE, iconSize, new Color(0, 180, 0)));
 	}
 
 	public void addLayerFileSaver(LayerFileSaver saver)

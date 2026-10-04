@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.com.formdev.flatlaf)
     implementation project(':common')
     implementation project(':common-math')
     implementation project(':common-gui')

@@ -4,6 +4,7 @@
 
 package edu.tigers.sumatra.ui;
 
+import com.formdev.flatlaf.util.UIScale;
 import lombok.extern.log4j.Log4j2;
 
 import javax.swing.JComponent;
@@ -13,7 +14,6 @@ import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -45,11 +45,10 @@ public class EnhancedStatusDisplay extends JPanel
 		
 		try {
 			setLayout(new BorderLayout());
-			setBorder(new EmptyBorder(8, 12, 8, 12));
+			setBorder(new EmptyBorder(UIScale.scale(8), UIScale.scale(12), UIScale.scale(8), UIScale.scale(12)));
 			setOpaque(false);
 			
 			statusLabel = new JLabel("Ready");
-			statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 			statusLabel.setForeground(Color.WHITE);
 			add(statusLabel, BorderLayout.CENTER);
 			

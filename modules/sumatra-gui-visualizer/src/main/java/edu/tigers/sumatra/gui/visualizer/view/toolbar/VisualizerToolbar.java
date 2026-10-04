@@ -1,5 +1,6 @@
 package edu.tigers.sumatra.gui.visualizer.view.toolbar;
 
+import com.formdev.flatlaf.util.UIScale;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import lombok.Getter;
@@ -136,35 +137,37 @@ public class VisualizerToolbar extends JToolBar
 		}
 
 		Color c = UIManager.getColor("Label.foreground");
+		int iconSize = UIScale.scale(16);
+		int smallIconSize = UIScale.scale(12);
 
-		darkMode.setIcon(IconFontSwing.buildIcon(FontAwesome.ADJUST, 16, c));
+		darkMode.setIcon(IconFontSwing.buildIcon(FontAwesome.ADJUST, iconSize, c));
 
-		borderOffset.setIcon(IconFontSwing.buildIcon(FontAwesome.ARROWS_V, 16, c));
+		borderOffset.setIcon(IconFontSwing.buildIcon(FontAwesome.ARROWS_V, iconSize, c));
 
-		showShortcuts.setIcon(IconFontSwing.buildIcon(FontAwesome.KEYBOARD_O, 16, c));
+		showShortcuts.setIcon(IconFontSwing.buildIcon(FontAwesome.KEYBOARD_O, iconSize, c));
 
 		captureSettings.setIcon(
-				IconFontSwing.buildIcon(FontAwesome.COG, 16, c)
+				IconFontSwing.buildIcon(FontAwesome.COG, iconSize, c)
 		);
 
 		// counter clockwise
 		turnCounterClockwise.setIcon(
-				IconFontSwing.buildIcon(FontAwesome.UNDO, 16, c)
+				IconFontSwing.buildIcon(FontAwesome.UNDO, iconSize, c)
 		);
 
 		// clockwise
 		turnClockwise.setIcon(
-				IconFontSwing.buildIcon(FontAwesome.REPEAT, 16, c)
+				IconFontSwing.buildIcon(FontAwesome.REPEAT, iconSize, c)
 		);
 
-		resetField.setIcon(IconFontSwing.buildIcon(FontAwesome.REFRESH, 16, c));
+		resetField.setIcon(IconFontSwing.buildIcon(FontAwesome.REFRESH, iconSize, c));
 
-		recordVideoFull.setIcon(IconFontSwing.buildIcon(FontAwesome.VIDEO_CAMERA, 16, c));
-		recordVideoSelection.setIcon(IconFontSwing.buildIcon(FontAwesome.VIDEO_CAMERA, 12, c));
+		recordVideoFull.setIcon(IconFontSwing.buildIcon(FontAwesome.VIDEO_CAMERA, iconSize, c));
+		recordVideoSelection.setIcon(IconFontSwing.buildIcon(FontAwesome.VIDEO_CAMERA, smallIconSize, c));
 
-		takeScreenshotFull.setIcon(IconFontSwing.buildIcon(FontAwesome.CAMERA, 16, c));
-		takeScreenshotSelection.setIcon(IconFontSwing.buildIcon(FontAwesome.CAMERA, 12, c));
+		takeScreenshotFull.setIcon(IconFontSwing.buildIcon(FontAwesome.CAMERA, iconSize, c));
+		takeScreenshotSelection.setIcon(IconFontSwing.buildIcon(FontAwesome.CAMERA, smallIconSize, c));
 
-		shapeSelection.setIcon(IconFontSwing.buildIcon(FontAwesome.OBJECT_GROUP, 16, c));
+		shapeSelection.setIcon(IconFontSwing.buildIcon(FontAwesome.OBJECT_GROUP, iconSize, c));
 	}
 }

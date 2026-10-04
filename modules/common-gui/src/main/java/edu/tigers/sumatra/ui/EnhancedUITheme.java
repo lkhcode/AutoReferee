@@ -4,6 +4,7 @@
 
 package edu.tigers.sumatra.ui;
 
+import com.formdev.flatlaf.util.UIScale;
 import lombok.extern.log4j.Log4j2;
 import net.infonode.docking.properties.RootWindowProperties;
 import net.infonode.docking.theme.DockingWindowsTheme;
@@ -18,7 +19,6 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-import java.awt.Font;
 
 /**
  * Enhanced UI theme provider for Sumatra application.
@@ -39,16 +39,17 @@ public class EnhancedUITheme
 	private static final Color WARNING_COLOR = new Color(245, 158, 11);
 	private static final Color ERROR_COLOR = new Color(239, 68, 68);
 	
-	// Enhanced font configuration
-	private static final Font DEFAULT_FONT = new Font("Segoe UI", Font.PLAIN, 12);
-	private static final Font HEADER_FONT = new Font("Segoe UI", Font.BOLD, 14);
-	private static final Font SMALL_FONT = new Font("Segoe UI", Font.PLAIN, 10);
-
 	/**
 	 * Applies enhanced theme to the application
 	 */
 	public static void applyEnhancedTheme()
 	{
+		// Keep caller-supplied FlatLaf scaling while making high-resolution displays readable by default.
+		if (System.getProperty("flatlaf.uiScale") == null)
+		{
+			System.setProperty("flatlaf.uiScale", "1.5");
+		}
+
 		long startTime = System.currentTimeMillis();
 		log.debug("Starting enhanced UI theme initialization");
 		
@@ -111,7 +112,6 @@ public class EnhancedUITheme
 		UIManager.put("Button.background", BACKGROUND_SECONDARY);
 		UIManager.put("Button.foreground", TEXT_PRIMARY);
 		UIManager.put("Button.border", createModernBorder());
-		UIManager.put("Button.font", DEFAULT_FONT);
 		UIManager.put("Button.focusPainted", false);
 		
 		// Panel styling
@@ -121,33 +121,27 @@ public class EnhancedUITheme
 		// Menu styling
 		UIManager.put("Menu.background", BACKGROUND_PRIMARY);
 		UIManager.put("Menu.foreground", TEXT_PRIMARY);
-		UIManager.put("Menu.font", DEFAULT_FONT);
 		UIManager.put("MenuItem.background", BACKGROUND_PRIMARY);
 		UIManager.put("MenuItem.foreground", TEXT_PRIMARY);
-		UIManager.put("MenuItem.font", DEFAULT_FONT);
 		UIManager.put("MenuBar.background", BACKGROUND_SECONDARY);
 		UIManager.put("MenuBar.foreground", TEXT_PRIMARY);
 		
 		// Tab styling
 		UIManager.put("TabbedPane.background", BACKGROUND_PRIMARY);
 		UIManager.put("TabbedPane.foreground", TEXT_PRIMARY);
-		UIManager.put("TabbedPane.font", DEFAULT_FONT);
 		UIManager.put("TabbedPane.selectedForeground", ACCENT_COLOR);
 		
 		// Text component styling
 		UIManager.put("TextField.background", Color.WHITE);
 		UIManager.put("TextField.foreground", TEXT_PRIMARY);
 		UIManager.put("TextField.border", createModernBorder());
-		UIManager.put("TextField.font", DEFAULT_FONT);
 		
 		// Table styling
 		UIManager.put("Table.background", Color.WHITE);
 		UIManager.put("Table.foreground", TEXT_PRIMARY);
 		UIManager.put("Table.gridColor", BORDER_COLOR);
-		UIManager.put("Table.font", DEFAULT_FONT);
 		UIManager.put("TableHeader.background", BACKGROUND_SECONDARY);
 		UIManager.put("TableHeader.foreground", TEXT_PRIMARY);
-		UIManager.put("TableHeader.font", HEADER_FONT);
 		
 		// Scrollbar styling
 		UIManager.put("ScrollBar.background", BACKGROUND_SECONDARY);
@@ -158,7 +152,6 @@ public class EnhancedUITheme
 		UIManager.put("ToolTip.background", new Color(255, 255, 255, 240));
 		UIManager.put("ToolTip.foreground", TEXT_PRIMARY);
 		UIManager.put("ToolTip.border", new LineBorder(BORDER_COLOR, 1));
-		UIManager.put("ToolTip.font", SMALL_FONT);
 	}
 	
 	/**
@@ -168,7 +161,7 @@ public class EnhancedUITheme
 	{
 		return new CompoundBorder(
 			new LineBorder(BORDER_COLOR, 1, true),
-			new EmptyBorder(4, 8, 4, 8)
+			new EmptyBorder(UIScale.scale(4), UIScale.scale(8), UIScale.scale(4), UIScale.scale(8))
 		);
 	}
 	

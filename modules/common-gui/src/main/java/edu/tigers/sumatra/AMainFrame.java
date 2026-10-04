@@ -1,5 +1,6 @@
 package edu.tigers.sumatra;
 
+import com.formdev.flatlaf.util.UIScale;
 import edu.tigers.sumatra.views.SumatraView;
 import edu.tigers.sumatra.ui.EnhancedStatusDisplay;
 import edu.tigers.sumatra.ui.EnhancedUITheme;
@@ -51,7 +52,7 @@ public abstract class AMainFrame extends JFrame
 	protected AMainFrame()
 	{
 		setLayout(new BorderLayout());
-		setSize(new Dimension(1200, 800)); // Larger default size for better modern experience
+		setSize(new Dimension(UIScale.scale(1200), UIScale.scale(800)));
 		setIconImage("/kralle-icon.png");
 
 		// Configure menu items with enhanced tooltips

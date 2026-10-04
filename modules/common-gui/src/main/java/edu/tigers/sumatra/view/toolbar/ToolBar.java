@@ -1,5 +1,6 @@
 package edu.tigers.sumatra.view.toolbar;
 
+import com.formdev.flatlaf.util.UIScale;
 import edu.tigers.sumatra.ids.EAiTeam;
 import edu.tigers.sumatra.model.SumatraModel;
 import edu.tigers.sumatra.util.ImageScaler;
@@ -102,18 +103,19 @@ public class ToolBar
 	private void updateIcons()
 	{
 		Color c = UIManager.getColor("Label.foreground");
+		int iconSize = UIScale.scale(28);
 
 		btnTournament.setIcon(btnTournament.isSelected()
-				? IconFontSwing.buildIcon(FontAwesome.TROPHY, 28, new Color(212, 175, 55))
-				: IconFontSwing.buildIcon(FontAwesome.TROPHY, 28, c));
+				? IconFontSwing.buildIcon(FontAwesome.TROPHY, iconSize, new Color(212, 175, 55))
+				: IconFontSwing.buildIcon(FontAwesome.TROPHY, iconSize, c));
 
 		btnRecSave.setIcon(btnRecSave.isSelected()
-				? IconFontSwing.buildIcon(FontAwesome.STOP_CIRCLE_O, 28, new Color(0, 180, 0))
-				: IconFontSwing.buildIcon(FontAwesome.DOT_CIRCLE_O, 28, c));
+				? IconFontSwing.buildIcon(FontAwesome.STOP_CIRCLE_O, iconSize, new Color(0, 180, 0))
+				: IconFontSwing.buildIcon(FontAwesome.DOT_CIRCLE_O, iconSize, c));
 
 		if (!emergencyAlarmActive)
 		{
-			btnEmergency.setIcon(IconFontSwing.buildIcon(FontAwesome.STOP_CIRCLE, 28, Color.RED));
+			btnEmergency.setIcon(IconFontSwing.buildIcon(FontAwesome.STOP_CIRCLE, iconSize, Color.RED));
 		}
 	}
 

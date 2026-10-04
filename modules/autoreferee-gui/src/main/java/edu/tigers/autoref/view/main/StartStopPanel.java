@@ -1,5 +1,6 @@
 package edu.tigers.autoref.view.main;
 
+import com.formdev.flatlaf.util.UIScale;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -28,9 +29,9 @@ public class StartStopPanel extends BasePanel<StartStopPanel.IStartStopPanelObse
 	
 	private void setupUI()
 	{
-		setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
+		setLayout(new FlowLayout(FlowLayout.CENTER, UIScale.scale(15), UIScale.scale(10)));
 		setBackground(Color.WHITE);
-		setBorder(new EmptyBorder(5, 10, 5, 10));
+		setBorder(new EmptyBorder(UIScale.scale(5), UIScale.scale(10), UIScale.scale(5), UIScale.scale(10)));
 	}
 	
 	private void createButtons()
@@ -59,10 +60,9 @@ public class StartStopPanel extends BasePanel<StartStopPanel.IStartStopPanelObse
 	{
 		JRadioButton button = new JRadioButton(text);
 		button.setToolTipText(tooltip);
-		button.setFont(new Font("微软雅黑", Font.PLAIN, 12));
 		button.setFocusPainted(false);
 		button.setBackground(Color.WHITE);
-		button.setBorder(new EmptyBorder(5, 10, 5, 10));
+		button.setBorder(new EmptyBorder(UIScale.scale(5), UIScale.scale(10), UIScale.scale(5), UIScale.scale(10)));
 		
 		// 添加鼠标悬停效果
 		button.addMouseListener(new java.awt.event.MouseAdapter() {
