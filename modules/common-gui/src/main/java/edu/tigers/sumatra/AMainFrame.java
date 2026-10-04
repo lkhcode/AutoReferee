@@ -3,6 +3,8 @@ package edu.tigers.sumatra;
 import edu.tigers.sumatra.views.SumatraView;
 import edu.tigers.sumatra.ui.EnhancedStatusDisplay;
 import edu.tigers.sumatra.ui.EnhancedUITheme;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import lombok.Getter;
 
 import javax.swing.ButtonGroup;
@@ -33,6 +35,11 @@ import java.util.stream.Collectors;
 @Getter
 public abstract class AMainFrame extends JFrame
 {
+	static
+	{
+		IconFontSwing.register(FontAwesome.getIconFont());
+	}
+
 	private final JMenu menuViews = new JMenu("Views");
 	private final JMenu menuLayout = new JMenu("Layout");
 	private final JMenuItem menuItemLayoutSave = new JMenuItem("Save layout");
