@@ -1,0 +1,81 @@
+name: Publish Lumina AutoReferee distribution
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      AUTOREF_COMMIT: 3580853a7924e63c638c5bba51e5f19e527d5763
+    steps:
+      - name: Checkout pinned AutoReferee source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.AUTOREF_COMMIT }}
+
+      - name: Verify source commit
+        run: test "$(git rev-parse HEAD)" = "${AUTOREF_COMMIT}"
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: gradle
+
+      - name: Build distribution
+        run: ./gradlew --no-daemon distZip
+
+      - name: Verify distribution and create checksum
+        run: |
+          python3 - <<'PY'
+          from hashlib import file_digest
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          archive = Path("build/distributions/autoReferee.zip")
+          with ZipFile(archive) as distribution:
+              bad_file = distribution.testzip()
+              if bad_file:
+                  raise SystemExit(f"Corrupt file in distribution: {bad_file}")
+              required = {
+                  "autoReferee/bin/autoReferee",
+                  "autoReferee/bin/autoReferee.bat",
+                  "autoReferee/lib/autoReferee.jar",
+                  "autoReferee/config/moduli/autoreferee-ci.xml",
+              }
+              missing = required.difference(distribution.namelist())
+              if missing:
+                  raise SystemExit(f"Incomplete distribution: {sorted(missing)}")
+              config = distribution.read("autoReferee/config/moduli/autoreferee-ci.xml").decode()
+              for expected in ("<geometry>DIV_B</geometry>", "<port>10013</port>",
+                               "<source>INTERNAL_FORWARDER</source>",
+                               "<gameControllerPort>10007</gameControllerPort>"):
+                  if expected not in config:
+                      raise SystemExit(f"Missing CI config value: {expected}")
+          with archive.open("rb") as source:
+              checksum = file_digest(source, "sha256").hexdigest()
+          archive.with_name("autoReferee.zip.sha256").write_text(
+              f"{checksum}  autoReferee.zip\n", encoding="ascii")
+          PY
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="autoreferee-${AUTOREF_COMMIT}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists" >&2
+            exit 1
+          fi
+          gh release create "$tag" \
+            build/distributions/autoReferee.zip \
+            build/distributions/autoReferee.zip.sha256 \
+            --target "${AUTOREF_COMMIT}" \
+            --latest=false \
+            --title "Lumina AutoReferee ${AUTOREF_COMMIT}" \
+            --notes "Full AutoReferee distZip for Lumina, built from this commit. Java 25 is required at runtime."
